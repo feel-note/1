@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>오늘의 기록</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f8f4ec;
+      color: #333;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .quote {
+      text-align: center;
+      font-style: italic;
+      color: #666;
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin: 20px 0 8px;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      resize: vertical;
+    }
+    .save-btn {
+      display: block;
+      width: 100%;
+      margin-top: 30px;
+      padding: 12px;
+      font-size: 18px;
+      background-color: #4a7c59;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .save-btn:hover {
+      background-color: #3b644a;
+    }
+    .intro {
+      text-align: center;
+      background-color: #fff6e6;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+  <h1>성찰노트</h1>
+  <p class="quote">"우리의 반복되는 행동이 습관이 되고 그게 미래의 모습이 된다."</p>
+
+  <div class="intro">
+    처음 오셨나요? 오늘 하루의 감정을 기록해보세요.<br />
+    내일 더 나은 나를 위한 시작입니다.
+  </div>
+
+  <label for="emotion">오늘의 감정이 어땠나요?</label>
+  <textarea id="emotion" placeholder="오늘의 감정을 자유롭게 적어보세요."></textarea>
+
+  <label for="good">잘한 점 3가지</label>
+  <textarea id="good" placeholder="오늘 내가 잘한 행동이나 선택은?"></textarea>
+
+  <label for="bad">못한 점 3가지</label>
+  <textarea id="bad" placeholder="후회되거나 아쉬운 일은 무엇이 있었나요?"></textarea>
+
+  <label for="improve">개선하고 싶은 점</label>
+  <textarea id="improve" placeholder="내일은 어떻게 다르게 해볼까요?"></textarea>
+
+  <button class="save-btn" onclick="saveNote()">💾 저장하기</button>
+
+  <script>
+    function saveNote() {
+      const emotion = document.getElementById("emotion").value;
+      const good = document.getElementById("good").value;
+      const bad = document.getElementById("bad").value;
+      const improve = document.getElementById("improve").value;
+
+      const note = {
+        emotion,
+        good,
+        bad,
+        improve,
+        date: new Date().toLocaleString()
+      };
+
+      const blob = new Blob([JSON.stringify(note, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "성찰노트.json";
+      a.click();
+
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
