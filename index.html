@@ -2,26 +2,20 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="google-site-verification" content="fK1irNYOg02fVtXtIPYYDldCnh5jlP9ct2fSzd89fTY" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>오늘의 기록</title>
+ <meta name="google-site-verification" content="fK1irNYOg02fVtXtIPYYDldCnh5jlP9ct2fSzd89fTY" />
+  <title>성찰노트 - 오늘의 기록</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
     body {
       font-family: 'Noto Sans KR', sans-serif;
       background-color: #f8f4ec;
       color: #333;
       max-width: 700px;
-      margin: 40px auto;
+      margin: auto;
       padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    h1 {
-      text-align: center;
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
+    h1 { text-align: center; font-size: 28px; margin-bottom: 10px; }
     .quote {
       text-align: center;
       font-style: italic;
@@ -31,90 +25,108 @@
     label {
       display: block;
       font-weight: bold;
-      margin: 20px 0 8px;
+      margin-top: 20px;
     }
     textarea {
       width: 100%;
-      height: 120px;
+      height: 100px;
       padding: 10px;
+      font-size: 16px;
+      margin-top: 8px;
       border: 1px solid #ccc;
       border-radius: 8px;
-      font-size: 16px;
       resize: vertical;
     }
-    .save-btn {
-      display: block;
+    .save-btn, .link-btn {
       width: 100%;
-      margin-top: 30px;
-      padding: 12px;
+      padding: 14px;
+      margin-top: 24px;
       font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .save-btn {
       background-color: #4a7c59;
       color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
     }
     .save-btn:hover {
       background-color: #3b644a;
     }
-    .intro {
+    .link-btn {
+      background-color: #e0a96d;
+      color: white;
+    }
+    .link-btn:hover {
+      background-color: #c88d56;
+    }
+    .footer {
       text-align: center;
-      background-color: #fff6e6;
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 16px;
-      margin-bottom: 24px;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
+
   <h1>성찰노트</h1>
   <p class="quote">"우리의 반복되는 행동이 습관이 되고 그게 미래의 모습이 된다."</p>
 
-  <div class="intro">
-    처음 오셨나요? 오늘 하루의 감정을 기록해보세요.<br />
-    내일 더 나은 나를 위한 시작입니다.
-  </div>
+  <label for="emotion">1️⃣ 오늘의 감정</label>
+  <textarea id="emotion" placeholder="오늘 어떤 감정을 느꼈나요?"></textarea>
 
-  <label for="emotion">오늘의 감정이 어땠나요?</label>
-  <textarea id="emotion" placeholder="오늘의 감정을 자유롭게 적어보세요."></textarea>
-
-  <label for="good">잘한 점 3가지</label>
+  <label for="good">2️⃣ 잘한 점</label>
   <textarea id="good" placeholder="오늘 내가 잘한 행동이나 선택은?"></textarea>
 
-  <label for="bad">못한 점 3가지</label>
-  <textarea id="bad" placeholder="후회되거나 아쉬운 일은 무엇이 있었나요?"></textarea>
+  <label for="bad">3️⃣ 아쉬운 점</label>
+  <textarea id="bad" placeholder="후회되거나 아쉬운 일은?"></textarea>
 
-  <label for="improve">개선하고 싶은 점</label>
-  <textarea id="improve" placeholder="내일은 어떻게 다르게 해볼까요?"></textarea>
+  <label for="improve">4️⃣ 개선하고 싶은 점</label>
+  <textarea id="improve" placeholder="내일은 어떻게 해볼까요?"></textarea>
 
-  <button class="save-btn" onclick="saveNote()">💾 저장하기</button>
+  <button class="save-btn" onclick="saveAsTxt()">💾 저장하기 (.txt)</button>
+  <button class="link-btn" onclick="copyLink()">🔗 링크 복사하기</button>
+
+  <div class="footer">
+    오늘의 기록은 당신의 미래를 만듭니다.
+  </div>
 
   <script>
-    function saveNote() {
+    function getFormattedDate() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const hh = String(now.getHours()).padStart(2, '0');
+      const min = String(now.getMinutes()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+    }
+
+    function saveAsTxt() {
       const emotion = document.getElementById("emotion").value;
       const good = document.getElementById("good").value;
       const bad = document.getElementById("bad").value;
       const improve = document.getElementById("improve").value;
+      const date = getFormattedDate();
 
-      const note = {
-        emotion,
-        good,
-        bad,
-        improve,
-        date: new Date().toLocaleString()
-      };
+      const content = `📅 기록일: ${date}\n\n[오늘의 감정]\n${emotion}\n\n[잘한 점]\n${good}\n\n[아쉬운 점]\n${bad}\n\n[개선하고 싶은 점]\n${improve}`;
+      
+      const blob = new Blob([content], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `성찰노트_${date.replace(/[: ]/g, "_")}.txt`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
 
-      const blob = new Blob([JSON.stringify(note, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "성찰노트.json";
-      a.click();
-
-      URL.revokeObjectURL(url);
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => alert("✅ 링크가 복사되었습니다!"))
+        .catch(() => alert("❌ 복사에 실패했습니다."));
     }
   </script>
+
 </body>
 </html>
